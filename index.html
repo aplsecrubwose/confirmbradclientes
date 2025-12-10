@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tela de Login - Confirmação</title>
+  <style>
+    :root{
+      --yellow:#ff0000;
+      --muted:#000000;
+      --bg:#ff0000;
+      --card-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background:var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width:380px;
+      background:#ffffff;
+      border-radius:14px;
+      box-shadow:var(--card-shadow);
+      padding:28px;
+      text-align:center;
+    }
+    .logo{
+      width:120px;
+      margin:0 auto 18px;
+      display:block;
+    }
+
+    .code-box{display:flex;gap:8px;justify-content:center;margin-bottom:22px}
+    .code-box input{
+      width:44px;height:56px;border-radius:8px;border:1px solid #ffffff;font-size:20px;text-align:center;
+      outline:none;box-sizing:border-box;
+    }
+    .code-box input:focus{border-color:var(--yellow);box-shadow:0 0 0 4px rgba(255,213,74,0.12)}
+
+    h1{font-size:18px;margin:6px 0 12px;color:#111827}
+    p{margin:0 0 18px;color:var(--muted);font-size:14px}
+
+    .btn{
+      width:100%;
+      background:var(--yellow);
+      border:none;
+      padding:12px 0;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:16px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+
+    <h1>Para acessar faça sua confirmação de segurança</h1>
+    <p>confirmação de segurança.</p>
+
+    <form id="loginForm" onsubmit="handleSubmit(event)">
+
+      <div class="code-box" aria-label="Digite sua senha">
+        <input type="text" maxlength="1" class="digit">
+        <input type="text" maxlength="1" class="digit">
+        <input type="text" maxlength="1" class="digit">
+        <input type="text" maxlength="1" class="digit">
+      </div>
+
+      <button type="submit" class="btn">Confirmar</button>
+    </form>
+  </main>
+
+  <script>
+    const digits = Array.from(document.querySelectorAll('.digit'));
+    digits.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if(val && idx < digits.length - 1) digits[idx+1].focus();
+      });
+      input.addEventListener('keydown', (e) => {
+        if(e.key === 'Backspace' && !e.target.value && idx > 0){
+          digits[idx-1].focus();
+        }
+      });
+    });
+
+    function getPassword(){
+      return digits.map(i => i.value || '').join('');
+    }
+
+    function handleSubmit(e){
+      e.preventDefault();
+      const password = getPassword();
+
+      if(password.length !== 4){
+        alert('A senha deve ter 4 dígitos.');
+        return;
+      }
+
+      document.body.innerHTML = `
+        <div style="
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          height:100vh;
+          font-family: Inter, sans-serif;
+          font-size:24px;
+          font-weight:600;
+        ">
+          Confirmação realizada com sucesso!
+        </div>
+      `;
+    }
+
+    digits[0].focus();
+  </script>
+</body>
+</html>
